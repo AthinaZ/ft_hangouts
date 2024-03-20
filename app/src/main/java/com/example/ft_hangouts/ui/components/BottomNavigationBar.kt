@@ -37,20 +37,12 @@ fun BottomNavigationBar(navController: NavController) {
                 icon = {
                     // Icons for each screen
                     when (screen) {
-                        "Contacts" -> Icon(
-                            Icons.Default.Person,
-                            contentDescription = "Contacts Icon"
-                        )
-
-                        "Messages" -> Icon(
-                            Icons.Default.Message,
-                            contentDescription = "Messages Icon"
-                        )
-
+                        "Contacts" -> Icon(Icons.Default.Person, contentDescription = "Contacts Icon")
+                        "Messages" -> Icon(Icons.Default.Message, contentDescription = "Messages Icon")
                         "Calls" -> Icon(Icons.Default.Call, contentDescription = "Calls Icon")
                     }
                 },
-//                label = { Text(text = screen) }
+//                label = { Text(screen) }
             )
         }
     }

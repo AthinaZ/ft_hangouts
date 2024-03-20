@@ -1,6 +1,7 @@
 package com.example.ft_hangouts.ui.screens
 
 import android.annotation.SuppressLint
+import android.content.Context
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -16,22 +17,19 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.ft_hangouts.ui.components.ContactItem
 import com.example.ft_hangouts.viewmodel.ContactViewModel
 import com.example.ft_hangouts.data.entity.ContactEntity
-import com.example.ft_hangouts.ui.components.BottomNavigationBar
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.text.style.TextAlign
-import com.example.ft_hangouts.ui.components.BottomNavigationBar
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
-fun ContactListScreen(navController: NavController, viewModel: ContactViewModel) {
+fun ContactListScreen(navController: NavController, viewModel: ContactViewModel, context: Context) {
     val contacts: List<ContactEntity> by viewModel.allContacts.observeAsState(emptyList())
 
     Scaffold(
@@ -47,15 +45,13 @@ fun ContactListScreen(navController: NavController, viewModel: ContactViewModel)
                 onClick = {
                     navController.navigate("add_contact")
                 },
-                modifier = Modifier.padding(16.dp),
+                modifier = Modifier
+                    .padding(end = 16.dp, bottom = 56.dp),
                 containerColor = MaterialTheme.colors.secondary,
             ) {
                 Icon(Icons.Default.Add, contentDescription = "Add Contact")
             }
         },
-        bottomBar = {
-            BottomNavigationBar(navController = navController)
-        }
     ) { innerPadding ->
         Column(
             modifier = Modifier
@@ -76,6 +72,7 @@ fun ContactListScreen(navController: NavController, viewModel: ContactViewModel)
                 ) {
                     items(contacts) { contact ->
                         ContactItem(
+                            context = context,
                             contact = contact,
                             onItemClick = {
                                 navController.navigate("edit_contact/${contact.id}") },

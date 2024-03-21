@@ -24,10 +24,13 @@ import androidx.navigation.navArgument
 import com.example.ft_hangouts.di.AppModule
 import com.example.ft_hangouts.ui.components.BottomNavigationBar
 import com.example.ft_hangouts.ui.screens.AddEditContactScreen
+import com.example.ft_hangouts.ui.screens.CallListScreen
 import com.example.ft_hangouts.ui.screens.ContactListScreen
 import com.example.ft_hangouts.ui.screens.MessageComposeScreen
 import com.example.ft_hangouts.ui.screens.MessageListScreen
 import com.example.ft_hangouts.ui.theme.Ft_hangoutsTheme
+import com.example.ft_hangouts.viewmodel.CallViewModel
+import com.example.ft_hangouts.viewmodel.CallViewModelFactory
 import com.example.ft_hangouts.viewmodel.ContactViewModel
 import com.example.ft_hangouts.viewmodel.ContactViewModelFactory
 import com.example.ft_hangouts.viewmodel.MessageViewModel
@@ -48,10 +51,13 @@ fun ContactApp(context: Context) {
     val navController = rememberNavController()
     val contactRepository = AppModule.provideContactRepository(context)
     val messageRepository = AppModule.provideMessageRepository(context)
+    val callRepository = AppModule.provideCallRepository(context)
     val contactViewModelFactory = ContactViewModelFactory(contactRepository)
     val messageViewModelFactory = MessageViewModelFactory(messageRepository)
+    val callViewModelFactory = CallViewModelFactory(callRepository)
     val contactViewModel: ContactViewModel = viewModel(factory = contactViewModelFactory)
     val messageViewModel: MessageViewModel = viewModel(factory = messageViewModelFactory)
+    val callContactViewModel: CallViewModel = viewModel(factory = callViewModelFactory)
 
     Scaffold(
         bottomBar = {
@@ -86,6 +92,9 @@ fun ContactApp(context: Context) {
                     MessageComposeScreen(navController = navController, viewModel = messageViewModel, contactId = contactId)
                 }
             )
+            composable("calls") {
+                CallListScreen(navController = navController, viewModel = callContactViewModel)
+            }
             // Other composable destinations
         }
     }

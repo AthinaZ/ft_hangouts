@@ -7,14 +7,16 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.TopAppBarDefaults.topAppBarColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -24,9 +26,10 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.ft_hangouts.data.entity.MessageEntity
 import com.example.ft_hangouts.viewmodel.MessageViewModel
-import java.text.DateFormat
-import java.util.Date
+//import java.text.DateFormat
+//import java.util.Date
 
+@OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun MessageListScreen(navController: NavController, viewModel: MessageViewModel) {
@@ -35,21 +38,26 @@ fun MessageListScreen(navController: NavController, viewModel: MessageViewModel)
     Scaffold(
         topBar = {
             TopAppBar(
+                colors = topAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.primaryContainer,
+                    titleContentColor = MaterialTheme.colorScheme.primary,
+                ),
                 title = { Text(text = "Conversation History") },
-                backgroundColor = MaterialTheme.colors.secondary,
-                elevation = 8.dp,
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
-                        Icon(Icons.Default.ArrowBack, contentDescription = "Back")
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
                     }
                 }
             )
         },
-        content = {
+        content = {paddingValues ->
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(16.dp)
+                    .padding(
+                        top = paddingValues.calculateBottomPadding() + 85.dp,
+                        bottom = paddingValues.calculateBottomPadding() + 85.dp
+                    )
             ) {
                 if (messages.isEmpty()) {
                     Text(
@@ -74,7 +82,7 @@ fun MessageItem(message: MessageEntity) {
     // customize the message item UI here
     Text(
         text = "${message.sender}: ${message.content}",
-        style = MaterialTheme.typography.body1,
+        style = MaterialTheme.typography.bodySmall,
         modifier = Modifier.padding(8.dp)
     )
 }

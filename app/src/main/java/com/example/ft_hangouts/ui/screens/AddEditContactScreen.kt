@@ -1,12 +1,10 @@
 package com.example.ft_hangouts.ui.screens
 
 import android.Manifest
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Environment
@@ -17,6 +15,7 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -30,16 +29,19 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Button
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.OutlinedTextField
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
+import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.AddAPhoto
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.TopAppBarDefaults.topAppBarColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
@@ -68,7 +70,7 @@ import java.util.Date
 import java.util.Locale
 
 
-@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddEditContactScreen(navController: NavController, viewModel: ContactViewModel, contactId: Int? = null) {
     Log.d("AddEditContactScreen", "Composable recomposed")
@@ -99,14 +101,13 @@ fun AddEditContactScreen(navController: NavController, viewModel: ContactViewMod
         firstname = contactState.value!!.firstname
         lastname = contactState.value!!.lastname
         phoneNumber = contactState.value!!.phone
-        email = contactState.value!!.email ?: ""
-        address = contactState.value!!.address ?: ""
-        notes = contactState.value!!.notes ?: ""
+        email = contactState.value!!.email
+        address = contactState.value!!.address
+        notes = contactState.value!!.notes
         imageUri = contactState.value!!.imageUri?.toUri()
     }
 
     // Create activity result launcher for picking image from gallery
-    val activity = LocalContext.current as Activity
     val activityResultLauncher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
             val data: Intent? = result.data
@@ -205,26 +206,35 @@ fun AddEditContactScreen(navController: NavController, viewModel: ContactViewMod
     Scaffold(
         topBar = {
             TopAppBar(
+                colors = topAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.primaryContainer,
+                    titleContentColor = MaterialTheme.colorScheme.primary,
+                ),
                 title = { Text(text = if (contactId != null) "Edit Contact" else "Add Contact") },
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
-                        Icon(Icons.Default.ArrowBack, contentDescription = "Back")
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
                     }
                 }
             )
         },
-        content = {
+        content = {paddingValues ->
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
-                    .padding(36.dp)
+                    .padding(
+                        top = paddingValues.calculateBottomPadding() + 85.dp,
+                        bottom = paddingValues.calculateBottomPadding() + 85.dp
+                    )
                     .verticalScroll(rememberScrollState())
             ) {
+//                Spacer(modifier = Modifier.height(26.dp))
                 Box(
                     modifier = Modifier
                         .size(180.dp)
                         .clip(CircleShape)
                         .background(Color.LightGray)
+                        .border(1.dp, Color.Gray, CircleShape)
                         .clickable { showImageSourceDialog() } // Make the box clickable to open the image picker
                 ) {
                     // Display the selected image if available, else display the placeholder
@@ -260,14 +270,18 @@ fun AddEditContactScreen(navController: NavController, viewModel: ContactViewMod
                     value = firstname,
                     onValueChange = { firstname = it },
                     label = { Text("First Name") },
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 25.dp)
                 )
                 Spacer(modifier = Modifier.height(16.dp))
                 OutlinedTextField(
                     value = lastname,
                     onValueChange = { lastname = it },
                     label = { Text("Last Name") },
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 25.dp)
                 )
                 Spacer(modifier = Modifier.height(16.dp))
                 OutlinedTextField(
@@ -275,7 +289,9 @@ fun AddEditContactScreen(navController: NavController, viewModel: ContactViewMod
                     onValueChange = { phoneNumber = it },
                     label = { Text("Phone Number") },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 25.dp)
                 )
                 Spacer(modifier = Modifier.height(16.dp))
                 OutlinedTextField(
@@ -283,21 +299,27 @@ fun AddEditContactScreen(navController: NavController, viewModel: ContactViewMod
                     onValueChange = { email = it },
                     label = { Text("Email") },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 25.dp)
                 )
                 Spacer(modifier = Modifier.height(16.dp))
                 OutlinedTextField(
                     value = address,
                     onValueChange = { address = it },
                     label = { Text("Address") },
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 25.dp)
                 )
                 Spacer(modifier = Modifier.height(16.dp))
                 OutlinedTextField(
                     value = notes,
                     onValueChange = { notes = it },
                     label = { Text("Notes") },
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 25.dp)
                 )
                 Spacer(modifier = Modifier.height(16.dp))
                 Button(
@@ -354,7 +376,9 @@ fun AddEditContactScreen(navController: NavController, viewModel: ContactViewMod
                             viewModel.deleteContact(deleteContact)
                             navController.popBackStack()
                         },
-                        modifier = Modifier.align(Alignment.End)
+                        modifier = Modifier
+                            .align(Alignment.End)
+//                            .padding(bottom = 55.dp)
                     ) {
                         Text(text = "Delete")
                     }

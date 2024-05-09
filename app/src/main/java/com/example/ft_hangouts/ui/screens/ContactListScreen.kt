@@ -8,13 +8,15 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
-import androidx.compose.material.TopAppBar
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.TopAppBarDefaults.topAppBarColors
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -28,6 +30,7 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.text.style.TextAlign
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ContactListScreen(navController: NavController, viewModel: ContactViewModel, context: Context) {
     val contacts: List<ContactEntity> by viewModel.allContacts.observeAsState(emptyList())
@@ -35,9 +38,11 @@ fun ContactListScreen(navController: NavController, viewModel: ContactViewModel,
     Scaffold(
         topBar = {
             TopAppBar(
+                colors = topAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.primaryContainer,
+                    titleContentColor = MaterialTheme.colorScheme.primary,
+                ),
                 title = { Text(text = "Hangouts") },
-                backgroundColor = MaterialTheme.colors.secondary,
-                elevation = 8.dp
             )
         },
         floatingActionButton = {
@@ -46,8 +51,8 @@ fun ContactListScreen(navController: NavController, viewModel: ContactViewModel,
                     navController.navigate("add_contact")
                 },
                 modifier = Modifier
-                    .padding(end = 16.dp, bottom = 56.dp),
-                containerColor = MaterialTheme.colors.secondary,
+                    .padding(end = 16.dp, bottom = 85.dp),
+                containerColor = MaterialTheme.colorScheme.primaryContainer,
             ) {
                 Icon(Icons.Default.Add, contentDescription = "Add Contact")
             }
@@ -58,7 +63,7 @@ fun ContactListScreen(navController: NavController, viewModel: ContactViewModel,
                 .fillMaxSize()
                 .padding(innerPadding)
         ) {
-            if (contacts.isNullOrEmpty()) {
+            if (contacts.isEmpty()) {
                 Text(
                     text = "No Contacts",
                     modifier = Modifier

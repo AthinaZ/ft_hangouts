@@ -15,12 +15,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.MaterialTheme
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.Message
 import androidx.compose.material.icons.filled.Call
-import androidx.compose.material.icons.filled.Message
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -104,7 +104,7 @@ fun ContactItem(
         // Display contact name
         Text(
             text = "${contact.firstname} ${contact.lastname}",
-            style = MaterialTheme.typography.subtitle1,
+            style = MaterialTheme.typography.bodyMedium,
             modifier = Modifier.weight(1f)
         )
 
@@ -115,7 +115,7 @@ fun ContactItem(
 
         // Message button
         IconButton(onClick = { onMessageClick() }) {
-            Icon(Icons.Default.Message, contentDescription = "Message")
+            Icon(Icons.AutoMirrored.Filled.Message, contentDescription = "Message")
         }
     }
 }

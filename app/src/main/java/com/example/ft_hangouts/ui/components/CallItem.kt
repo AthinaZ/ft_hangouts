@@ -7,18 +7,16 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.Icon
-import androidx.compose.material.Text
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.CallMade
-import androidx.compose.material.icons.filled.CallMissed
-import androidx.compose.material.icons.filled.CallReceived
+import androidx.compose.material.icons.automirrored.filled.CallMade
+import androidx.compose.material.icons.automirrored.filled.CallMissed
+import androidx.compose.material.icons.automirrored.filled.CallReceived
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import com.example.ft_hangouts.R
 import com.example.ft_hangouts.data.entity.CallEntity
 import com.example.ft_hangouts.data.entity.CallType
 
@@ -32,9 +30,9 @@ fun CallItem(call: CallEntity) {
     ) {
         // Display call type icon based on call type (incoming, outgoing, missed)
         val callTypeIcon = when (call.callType) {
-            CallType.INCOMING -> Icons.Default.CallReceived
-            CallType.OUTGOING -> Icons.Default.CallMade
-            CallType.MISSED -> Icons.Default.CallMissed
+            CallType.INCOMING -> Icons.AutoMirrored.Filled.CallReceived
+            CallType.OUTGOING -> Icons.AutoMirrored.Filled.CallMade
+            CallType.MISSED -> Icons.AutoMirrored.Filled.CallMissed
         }
         Icon(
             imageVector = callTypeIcon,
